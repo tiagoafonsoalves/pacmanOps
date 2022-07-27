@@ -50,3 +50,22 @@ spec:
                 name: pacman-clusterip-service
                 port:
                   number: 80
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: pacman-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: pacman-deployment
+  metrics:
+  - resource:
+      name: cpu
+      target:
+        averageUtilization: 1
+        type: Utilization
+    type: Resource
+  minReplicas: 1
+  maxReplicas: 10
